@@ -59,8 +59,9 @@ Recommended (free tier, ~3 minutes to set up): [Neon](https://neon.tech). Sign u
 
 To switch from SQLite to Postgres:
 
-1. In `prisma/schema.prisma`, change `provider = "sqlite"` to `provider = "postgresql"`.
-2. In your Vercel project dashboard → Settings → Environment Variables, add `DATABASE_URL` with your Neon connection string.
+**Step 1.** In `prisma/schema.prisma`, change `provider = "sqlite"` to `provider = "postgresql"`.
+
+**Step 2.** In your Vercel project dashboard → Settings → Environment Variables, add `DATABASE_URL` with your Neon connection string.
 
 > ⚠️ **Important — dialect switch:** you already ran `prisma migrate dev` against SQLite in "Running locally" Step 2, so the migrations in `prisma/migrations/` are SQLite-flavored (`AUTOINCREMENT`, `DATETIME`) and will fail on Postgres. Before doing Step 3:
 >
@@ -72,11 +73,11 @@ To switch from SQLite to Postgres:
 >    After committing the Postgres-flavored migrations, keep your local `.env` pointed at Neon for the rest of the test. Swapping back to SQLite locally will cause provider-mismatch errors on the next `prisma migrate dev` against the committed Postgres migrations.
 > 3. Proceed with Step 3 below. `prisma migrate dev` will now generate Postgres-flavored migrations.
 
-3. Run `npx prisma migrate dev --name init` locally once to generate the migration files in `prisma/migrations/` — commit those files. On Vercel, the build script runs `prisma migrate deploy` to apply them.
-4. On Vercel, `prisma migrate deploy` runs automatically during build (via the updated `build` script in `package.json`).
-5. Make sure Vercel's Deployment Protection is OFF for this project (Settings → Deployment Protection → None) so the deploy URL is publicly accessible — your submission requires a public URL, not one behind SSO or a password.
+**Step 3.** Run `npx prisma migrate dev --name init` locally once to generate the migration files in `prisma/migrations/` — commit those files. On Vercel, the build script runs `prisma migrate deploy` to apply them.
 
-Local development still works with SQLite — just keep your local `.env` pointed at `file:./dev.db` for dev, and the Vercel env var pointed at Neon for prod.
+**Step 4.** On Vercel, `prisma migrate deploy` runs automatically during build (via the updated `build` script in `package.json`).
+
+**Step 5.** Make sure Vercel's Deployment Protection is OFF for this project (Settings → Deployment Protection → None) so the deploy URL is publicly accessible — your submission requires a public URL, not one behind SSO or a password.
 
 ---
 
