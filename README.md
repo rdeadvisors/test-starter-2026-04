@@ -61,6 +61,15 @@ To switch from SQLite to Postgres:
 
 1. In `prisma/schema.prisma`, change `provider = "sqlite"` to `provider = "postgresql"`.
 2. In your Vercel project dashboard → Settings → Environment Variables, add `DATABASE_URL` with your Neon connection string.
+
+> ⚠️ **Important — dialect switch:** you already ran `prisma migrate dev` against SQLite in "Running locally" Step 2, so the migrations in `prisma/migrations/` are SQLite-flavored (`AUTOINCREMENT`, `DATETIME`) and will fail on Postgres. Before doing Step 3:
+>
+> 1. Delete the existing migrations folder:
+>    - macOS/Linux: `rm -rf prisma/migrations/`
+>    - Windows: `rmdir /s /q prisma\migrations`
+> 2. Update your local `.env` so `DATABASE_URL` points at your Neon connection string (temporarily — you can swap back to SQLite after committing).
+> 3. Proceed with Step 3 below. `prisma migrate dev` will now generate Postgres-flavored migrations.
+
 3. Run `npx prisma migrate dev --name init` locally once to generate the migration files in `prisma/migrations/` — commit those files. On Vercel, the build script runs `prisma migrate deploy` to apply them.
 4. On Vercel, `prisma migrate deploy` runs automatically during build (via the updated `build` script in `package.json`).
 5. Make sure Vercel's Deployment Protection is OFF for this project (Settings → Deployment Protection → None) so the deploy URL is publicly accessible — your submission requires a public URL, not one behind SSO or a password.
